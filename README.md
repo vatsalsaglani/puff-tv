@@ -8,6 +8,8 @@ A little space to breathe — a free, open-source Android TV companion with opti
 
 ## Get Puff
 
+[Step-by-step computer installation guide](https://vatsalsaglani.github.io/puff-tv/#install): USB-drive installation, macOS/Linux/Windows ADB commands, pairing, and optional feature setup. Puff runs on Android devices; there is no native desktop app.
+
 Download the signed APK from [Releases](https://github.com/vatsalsaglani/puff-tv/releases). Install on your TV; install the same APK on an Android phone if you want Puff screen sharing. On phones, Puff opens the casting screen directly.
 
 You can sideload with a USB drive/file manager or `adb install -r Puff.apk`. Keep the same signing certificate when updating; uninstalling clears settings and local pairing keys.
