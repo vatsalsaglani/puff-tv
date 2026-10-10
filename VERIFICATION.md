@@ -16,7 +16,7 @@ Local verification on 2026-10-10, OnePlus Y Series / Android 11 / ARM32, ~925 Mi
 - DLNA SOAP SetAVTransportURI / Play displays a PNG test card full screen.
 - Switching to an H.264 MP4 plays the test clip, with visible frame/time progression.
 - Puff's Home overlay is absent during these cast displays.
-- The Android mirror receiver renders a synthetic H.264 stream sent using the same framing protocol as the phone sender. This is a receiver test, not a physical-phone test.
+- The Android mirror receiver rendered a 15-second / 450-frame synthetic H.264 stream sent using the same framing protocol as the phone sender, with no decoder-drop warnings in the final run. This is a receiver test, not a physical-phone test.
 - Oversized DLNA request-line and body-length declarations are rejected on the TV; subsequent valid requests still succeed.
 - Home-monitor process measured about 17 MiB proportional-set memory; the active casting process was separate, about 62 MiB during these checks. These are snapshots, not a memory guarantee.
 - Found and fixed two old-TV issues during testing: fullscreen insets queried before a window existed, and a decoder low-latency option requested on unsupported hardware.
