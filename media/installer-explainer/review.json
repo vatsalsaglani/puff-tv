@@ -1,0 +1,14 @@
+{
+  "artifact_sha256": "dab271483ab778e1c23c9b39462686afa8bb80a306d279f5f561fb2836383eb5",
+  "reviewer": "Codex",
+  "technical": true,
+  "visual_review": {
+    "samples": "All scene beauty frames; encoded transition strips at 15.267\u201315.8, 40.1\u201340.633, 49.267\u201349.8, 62.233\u201362.767 seconds; browser playback at 0\u201318 seconds.",
+    "findings": "Black thin-border visual hierarchy is readable. Approval is followed by authorization, then install controls. Completion follows installation. Mobile platform buttons fit 390px viewport without overflow.",
+    "repairs": "Separated license check from download-button action; made TV approval dialog dismiss on authorization; added independently measured state assertions.",
+    "limits": "Full uninterrupted playback and independent creative critique not performed."
+  },
+  "browser_captions": "Verified seven loaded cues, visible English captions, toggle on/off and error-free local playback.",
+  "audio_listening": "Not performed. Audio decode, level and clipping checks passed; pronunciation/naturalness remain unverified.",
+  "evidence_export": "Contact-sheet extraction restarted with bounded scene/beat/action-edge samples after full render. Every-frame audit and final video unchanged. Rebuild wrapper included to avoid oversized contact sheets."
+}

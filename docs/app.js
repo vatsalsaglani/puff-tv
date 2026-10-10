@@ -3,3 +3,21 @@ if(!reduced && 'IntersectionObserver' in window){document.documentElement.classL
 const toggle=document.querySelector('#demo-toggle'),panel=document.querySelector('#demo-panel');toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!open));toggle.setAttribute('aria-label',open?'Open Puff controls':'Close Puff controls');panel.hidden=open;});
 const clean=document.querySelector('#demo-clean'),status=document.querySelector('#demo-status');clean.addEventListener('click',()=>{clean.disabled=true;clean.querySelector('.clean-label').textContent='Tidying up…';status.textContent='Preview only — your device is not being changed.';setTimeout(()=>{clean.disabled=false;clean.querySelector('.clean-label').textContent='Clean apps';status.textContent='All done. Your apps and sign-ins stay. (Demo)'},1500)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){panel.hidden=true;toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open Puff controls');toggle.focus()}});
+
+// A visible caption switch complements the browser's native media controls.
+const installerVideo = document.querySelector('#installer-film video');
+const captionSwitch = document.querySelector('#installer-captions');
+if (installerVideo && captionSwitch) {
+  captionSwitch.hidden = false;
+  const reflectCaptions = () => {
+    const showing = Array.from(installerVideo.textTracks).some(track => track.mode === 'showing');
+    captionSwitch.setAttribute('aria-pressed', String(showing));
+    captionSwitch.textContent = showing ? 'English captions: on' : 'English captions: off';
+  };
+  captionSwitch.addEventListener('click', () => {
+    const enabled = captionSwitch.getAttribute('aria-pressed') !== 'true';
+    Array.from(installerVideo.textTracks).forEach(track => { track.mode = enabled ? 'showing' : 'disabled'; });
+    reflectCaptions();
+  });
+  installerVideo.textTracks.addEventListener('change', reflectCaptions);
+}

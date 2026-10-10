@@ -1,0 +1,31 @@
+WEBVTT
+
+NOTE Beat-level captions from measured narration; not word-aligned.
+
+1
+00:00:00.250 --> 00:00:10.386
+Puff Installer puts Puff on your Android TV, without terminal commands. Download the version for your Mac or Windows computer. Extract the zip, then open the helper.
+
+2
+00:00:11.350 --> 00:00:20.245
+Read the Android SDK license and accept it if you agree. Choose Download Android tools. The helper gets the tools directly from Google.
+
+3
+00:00:21.217 --> 00:00:30.931
+Put your computer and TV on the same trusted network. Enable the TV’s supported network debugging option. USB debugging alone may not be enough.
+
+4
+00:00:31.883 --> 00:00:42.417
+Choose Find my TV, then select your TV from the results. If discovery misses it, enter its local address. TVs with pairing codes have a separate pairing form.
+
+5
+00:00:43.383 --> 00:00:52.582
+Approve the debugging request on the TV with your remote. The installer checks that the device is an Android TV running Android nine or newer.
+
+6
+00:00:53.550 --> 00:01:03.533
+Check the TV model, then choose Install Puff on this TV. The helper downloads Puff, checks the file, and installs it. Keep your TV on until it finishes.
+
+7
+00:01:04.483 --> 00:01:16.349
+Puff opens on the TV. Set up casting, Home controls, or optional cleanup there. This is a beta: discovery depends on your TV. The website has a USB drive fallback.

@@ -1,0 +1,237 @@
+{
+  "title": "Bring Puff home \u2014 installer walkthrough",
+  "question": "How do I install Puff without terminal commands?",
+  "audience": "Android TV owners using Mac or Windows",
+  "duration_range": [
+    60,
+    130
+  ],
+  "voice": "af_heart",
+  "language": "en-us",
+  "speed": 1.03,
+  "layout": "constrained",
+  "captions": {
+    "burn_in": false,
+    "vtt": true,
+    "embedded": false
+  },
+  "sources": [
+    {
+      "id": "installer",
+      "title": "Puff Installer 0.1.0 implementation and setup",
+      "url": "https://github.com/vatsalsaglani/puff-tv/tree/78551ea8f3a12633c84f2257710209d03ce982e9/installer",
+      "accessed": "2026-10-10",
+      "locator": "core.cjs lines 24\u201331; ui/index.html; README.md Use and Verification",
+      "evidence": "License-gated tool download; bounded LAN discovery; manual/pair forms; explicit TV authorization, feature/API checks, hash verification, install and launch.",
+      "limits": "Reconstructed illustrative walkthrough, not a screen recording or guaranteed outcome. Windows, Intel Mac, pairing and first-time provisioning remain untested as documented."
+    }
+  ],
+  "claims": [
+    {
+      "id": "open",
+      "text": "Puff Installer puts Puff on your Android TV, without terminal commands. Download the version for your Mac or Windows computer. Extract the zip, then open the helper.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "prepare",
+      "text": "Read the Android SDK license and accept it if you agree. Choose Download Android tools. The helper gets the tools directly from Google.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "network",
+      "text": "Put your computer and TV on the same trusted network. Enable the TV\u2019s supported network debugging option. USB debugging alone may not be enough.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "discover",
+      "text": "Choose Find my TV, then select your TV from the results. If discovery misses it, enter its local address. TVs with pairing codes have a separate pairing form.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "approve",
+      "text": "Approve the debugging request on the TV with your remote. The installer checks that the device is an Android TV running Android nine or newer.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "install",
+      "text": "Check the TV model, then choose Install Puff on this TV. The helper downloads Puff, checks the file, and installs it. Keep your TV on until it finishes.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "done",
+      "text": "Puff opens on the TV. Set up casting, Home controls, or optional cleanup there. This is a beta: discovery depends on your TV. The website has a USB drive fallback.",
+      "sources": [
+        "installer"
+      ],
+      "status": "verified"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "open",
+      "title": "Bring Puff home.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "open-voice",
+          "text": "Puff Installer puts Puff on your Android TV, without terminal commands. Download the version for your Mac or Windows computer. Extract the zip, then open the helper.",
+          "claims": [
+            "open"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "prepare",
+      "title": "Prepare once.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "prepare-voice",
+          "text": "Read the Android SDK license and accept it if you agree. Choose Download Android tools. The helper gets the tools directly from Google.",
+          "claims": [
+            "prepare"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "One network. Two screens.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "network-voice",
+          "text": "Put your computer and TV on the same trusted network. Enable the TV\u2019s supported network debugging option. USB debugging alone may not be enough.",
+          "claims": [
+            "network"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "discover",
+      "title": "Find your TV.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "discover-voice",
+          "text": "Choose Find my TV, then select your TV from the results. If discovery misses it, enter its local address. TVs with pairing codes have a separate pairing form.",
+          "claims": [
+            "discover"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "approve",
+      "title": "Look up at your TV.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "approve-voice",
+          "text": "Approve the debugging request on the TV with your remote. The installer checks that the device is an Android TV running Android nine or newer.",
+          "claims": [
+            "approve"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "install",
+      "title": "One last click.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "install-voice",
+          "text": "Check the TV model, then choose Install Puff on this TV. The helper downloads Puff, checks the file, and installs it. Keep your TV on until it finishes.",
+          "claims": [
+            "install"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "done",
+      "title": "A little more room.",
+      "lead": 0.25,
+      "tail": 0.7,
+      "gap": 0.1,
+      "objects": [],
+      "beats": [
+        {
+          "id": "done-voice",
+          "text": "Puff opens on the TV. Set up casting, Home controls, or optional cleanup there. This is a beta: discovery depends on your TV. The website has a USB drive fallback.",
+          "claims": [
+            "done"
+          ]
+        }
+      ]
+    }
+  ],
+  "studio": {
+    "zones": {
+      "landscape": {
+        "title": [
+          24,
+          18,
+          616,
+          98
+        ],
+        "content": [
+          24,
+          104,
+          616,
+          313
+        ],
+        "footer": [
+          24,
+          320,
+          616,
+          357
+        ]
+      }
+    }
+  },
+  "notes": {
+    "brief": "User requests platform icons and an installer motion explainer matching the supplied black, thin-border Puff website. Summary of request, not a verbatim prompt.",
+    "direction": "Persistent desktop helper at left, TV at right. Cursor targets actual labeled controls; approval occurs on TV before installation. White type, thin gray contours, static starfield; no shadows. Show simulated progress as illustration, not measurement. Settled states held for reading.",
+    "review": "Fresh synthesis; independent critique/listening must be recorded separately. Website publishes selectable captions."
+  }
+}
