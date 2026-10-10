@@ -1,0 +1,1 @@
+<resources><string name="accessibility_description">Shows Puff only on your TV Home screen and detects the remote shortcut you choose. Checks window package names, not screen text. No keystroke history is stored or sent anywhere. Turn off this service to remove the floating control and shortcut; automatic cleanup can continue separately.</string></resources>

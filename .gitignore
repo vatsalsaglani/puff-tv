@@ -1,0 +1,10 @@
+local.properties
+.gradle/
+.cxx/
+**/build/
+*.jks
+*.keystore
+*.apk
+*.aab
+.DS_Store
+.kotlin/
