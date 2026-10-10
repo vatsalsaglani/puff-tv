@@ -145,6 +145,7 @@ fun MainScreen(
         )
     } else {
         Scaffold(
+            containerColor = Color.Transparent,
             bottomBar = {
                 NavigationBar {
                     Tab.entries.forEach { t ->
@@ -404,6 +405,8 @@ private fun OverviewContent(
 
         // controls
         Card(
+            border = androidx.compose.foundation.BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -440,7 +443,7 @@ private fun OverviewContent(
                         )
                     }
 
-                    FilledTonalButton(
+                    OutlinedButton(
                         onClick = {
                             if (state == ServerState.RUNNING) viewModel.stopServer()
                             else viewModel.startServer()

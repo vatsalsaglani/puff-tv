@@ -4,6 +4,8 @@ A little space to breathe — a free, open-source Android TV companion with opti
 
 **Beta.** The TV features are being tested on a OnePlus Y Series running Android 11. Other firmware can restrict debugging, accessibility shortcuts, background launches or codecs. Android 9+; ARM32, ARM64 and x86_64 builds. No subscription or ads.
 
+[Explore Puff](https://vatsalsaglani.github.io/puff-tv/) — the product website and interactive preview.
+
 ## Get Puff
 
 Download the signed APK from [Releases](https://github.com/vatsalsaglani/puff-tv/releases). Install on your TV; install the same APK on an Android phone if you want Puff screen sharing. On phones, Puff opens the casting screen directly.
@@ -51,3 +53,7 @@ Current list: Spotify, Sony LIV, Hotstar, ZEE5, FanCode, Shemaroo, Apple TV, Net
 See [BUILDING.md](BUILDING.md) and [VERIFICATION.md](VERIFICATION.md). Please report your TV model, Android version, sender and a reproducible issue; remove device names, IP addresses and media URLs from logs before sharing.
 
 Puff is GPL-3.0 licensed, based on [Android AirPlay Server](https://github.com/jqssun/android-airplay-server) and [AirPlay + DLNA Receiver](https://github.com/F-e-n-y-x/airplay-dlna-receiver), with substantial Home/cleanup integration and receiver changes. See [THIRD_PARTY.md](THIRD_PARTY.md). Puff is not affiliated with Apple, Google or OnePlus.
+
+## Website
+
+The static GitHub Pages site lives in `docs/` and deploys from `main` / `docs`. Preview with `python3 -m http.server 8766 --directory docs`. No build step is required. Motion respects the system reduced-motion setting. All product illustrations are original SVG/CSS.

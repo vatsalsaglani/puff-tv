@@ -71,7 +71,7 @@ fun SettingsScreen(viewModel: MainViewModel) {
             .padding(vertical = 8.dp)
     ) {
         SectionHeader(stringResource(R.string.section_appearance))
-        ThemeSelector(themeMode) { viewModel.setThemeMode(it) }
+        ListItem(headlineContent = { Text("Midnight") }, supportingContent = { Text("Black surfaces, fine outlines and a quiet star field.") })
 
         SectionHeader(stringResource(R.string.section_server))
 

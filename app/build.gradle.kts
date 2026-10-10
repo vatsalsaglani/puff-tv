@@ -32,8 +32,8 @@ android {
         applicationId = "dev.local.tvbootcleaner"
         minSdk = 28
         targetSdk = 35
-        versionCode = 9
-        versionName = "3.0.0-beta.3"
+        versionCode = 10
+        versionName = "3.0.0-beta.4"
 
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")

@@ -41,3 +41,9 @@ The original cleanup/overlay build was also checked through a real restart, Home
 - Native video teardown and the final client disconnect now release the AirPlay renderer and mark video inactive.
 - The UI follows active video rather than open control sockets: stopping mirroring exits fullscreen and removes the old video surface, returning to the waiting screen.
 - Release build and seven JVM tests pass. Signed beta.3 installed in place. A synthetic RTSP video TEARDOWN on the TV returned 200 OK and invoked the new clear-playback callback; the server remained running. A real iPhone stop/reconnect visual check remains pending.
+
+## Midnight theme — beta.4
+
+- Black app and casting palettes, rounded outlined controls, and a static star-field drawable for Home and the translucent floating companion. Removed overlay elevation. Metric arcs retain contrasting colors for readability.
+- Release APK builds successfully. Main TV screen and Home badge visually inspected on the OnePlus.
+- Static product website checked at desktop and 390px mobile widths; no horizontal overflow, expanding demo and cleanup simulation work, and no browser console errors were observed. Motion has a reduced-motion fallback.
