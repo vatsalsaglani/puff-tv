@@ -47,3 +47,10 @@ The original cleanup/overlay build was also checked through a real restart, Home
 - Black app and casting palettes, rounded outlined controls, and a static star-field drawable for Home and the translucent floating companion. Removed overlay elevation. Metric arcs retain contrasting colors for readability.
 - Release APK builds successfully. Main TV screen and Home badge visually inspected on the OnePlus.
 - Static product website checked at desktop and 390px mobile widths; no horizontal overflow, expanding demo and cleanup simulation work, and no browser console errors were observed. Motion has a reduced-motion fallback.
+
+## Desktop installer beta 0.1
+
+- Six core tests pass. Discovery and installation backend tested end to end against the OnePlus Y Series: found, verified TV/API level, checked APK digest, installed successfully and opened Puff.
+- Packaged Apple-silicon Mac app launches; ad-hoc signature verified. macOS Intel and Windows x64 archives built, but runtime checks on those platforms are pending.
+- First-time TV authorization, pairing-code setup and Google tool provisioning on a clean machine remain unverified. Test integration reused an existing authorized ADB server. These limitations are included in the installer README and release notes.
+- Publisher signing/notarization is not available. Downloads are an explicitly labeled beta.

@@ -14,3 +14,7 @@ Puff is a derivative work distributed under GPL-3.0. Keep copyright notices and 
 - AndroidX, Compose, Media3, Hilt, Kotlin and coroutines: their upstream Apache-2.0 licenses apply.
 
 Puff's cloud artwork is drawn in code; no Apple icons, fonts or proprietary UI assets are bundled. Apple/AirPlay, Android/Google Cast and other product names identify interoperability targets, not endorsement.
+
+## Desktop installer
+
+Puff Installer uses Electron (MIT plus bundled Chromium/third-party notices) and adm-zip (MIT). Build tooling uses electron-builder (MIT). Exact versions are pinned in `installer/package-lock.json`. Google's Android SDK Platform Tools are downloaded at runtime from Google after user license acceptance; they are not bundled with or relicensed by Puff. Their NOTICE files are retained with the tools.
