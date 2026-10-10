@@ -59,6 +59,8 @@ class AirPlayService : Service(), RaopCallbackHandler {
     private var foregroundStarted = false
 
     val videoRenderer = VideoRenderer()
+    private val _videoActive = MutableStateFlow(false)
+    val videoActive = _videoActive.asStateFlow()
     val audioRenderer = AudioRenderer()
 
     private val _serverState = MutableStateFlow(ServerState.STOPPED)
@@ -343,6 +345,7 @@ class AirPlayService : Service(), RaopCallbackHandler {
         nsdManager = null
         wakeLock?.release()
         wakeLock = null
+        _videoActive.value = false
         videoRenderer.release()
         audioRenderer.release()
         mediaSession?.isActive = false
@@ -382,7 +385,14 @@ class AirPlayService : Service(), RaopCallbackHandler {
     // RaopCallbackHandler (called from native threads)
 
     override fun onVideoData(data: ByteArray, ntpTimeNs: Long, isH265: Boolean) {
+        _videoActive.value = true
         videoRenderer.feedFrame(data, ntpTimeNs, isH265)
+    }
+
+    override fun onVideoStopped() {
+        _videoActive.value = false
+        videoRenderer.release()
+        log("Video stopped; cleared playback")
     }
 
     override fun onAudioData(data: ByteArray, ct: Int, ntpTimeNs: Long, seqNum: Int) {
@@ -427,6 +437,7 @@ class AirPlayService : Service(), RaopCallbackHandler {
     override fun onConnectionDestroy() {
         _connectionCount.value = (_connectionCount.value - 1).coerceAtLeast(0)
         if (_connectionCount.value == 0) {
+            onVideoStopped()
             _audioOnly.value = false
             _trackInfo.value = TrackInfo()
             _positionMs.value = 0

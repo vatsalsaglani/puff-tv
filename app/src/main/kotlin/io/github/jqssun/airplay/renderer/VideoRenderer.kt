@@ -14,6 +14,9 @@ class VideoRenderer {
     private var displaySurface: Surface? = null
     private var currentH265 = false
     private var waitingForKeyframe = false
+    private var lastInputNs = 0L
+    private var renderedFrames = 0L
+    private var lastDiagnosticNs = 0L
     private var videoWidth = 0
     private var videoHeight = 0
 
@@ -43,7 +46,8 @@ class VideoRenderer {
     private var _ptsBaseUs = Long.MIN_VALUE
     private var _wallBaseNs = 0L
 
-    fun setResolution(w: Int, h: Int) {
+    fun setResolution(w: Int, h: Int) = synchronized(lock) {
+        if (w != videoWidth || h != videoHeight) stopCodec()
         videoWidth = w
         videoHeight = h
         pipeline.setVideoSize(w, h)
@@ -90,6 +94,12 @@ class VideoRenderer {
         _updateStats(data.size)
 
         synchronized(lock) {
+            lastInputNs = System.nanoTime()
+            if (lastInputNs - lastDiagnosticNs > 2_000_000_000L) {
+                Log.i(TAG, "Video input=$frameCount output=$renderedFrames dropped=$droppedFrames waitingKey=$waitingForKeyframe size=${videoWidth}x${videoHeight}")
+                lastDiagnosticNs = lastInputNs
+            }
+            drainOutput()
             if (videoWidth == 0 || videoHeight == 0) return
             if (waitingForKeyframe) {
                 if (!_isKeyframe(data, isH265)) return
@@ -112,20 +122,28 @@ class VideoRenderer {
             drainOutput()
             _feedToCodec(data, ntpTimeNs)
             drainOutput()
+            lock.notifyAll()
         }
     }
 
     private fun _feedToCodec(data: ByteArray, ntpTimeNs: Long) {
         val c = codec ?: return
-        var idx = c.dequeueInputBuffer(10000)
-        if (idx < 0) {
+        // Hardware input buffers can be held until output is released. Keep draining
+        // during backpressure instead of blocking the only path that can free them.
+        val deadline = System.nanoTime() + 250_000_000L
+        var idx: Int
+        do {
             drainOutput()
-            idx = c.dequeueInputBuffer(50000)
-        }
+            idx = c.dequeueInputBuffer(5000)
+        } while (idx < 0 && System.nanoTime() < deadline)
         if (idx >= 0) {
-            val buf = c.getInputBuffer(idx) ?: return
+            val buf = c.getInputBuffer(idx) ?: run {
+                c.queueInputBuffer(idx, 0, 0, ntpTimeNs / 1000, 0)
+                return
+            }
             buf.clear()
             if (data.size > buf.capacity()) {
+                c.queueInputBuffer(idx, 0, 0, ntpTimeNs / 1000, 0)
                 droppedFrames++
                 waitingForKeyframe = true
                 Log.w(TAG, "Frame ${data.size}B exceeds input buffer ${buf.capacity()}B; dropping")
@@ -145,6 +163,7 @@ class VideoRenderer {
     private fun startCodec(h265: Boolean) {
         pipeline.start()
         pipeline.setVideoSize(videoWidth, videoHeight)
+        pipeline.setDisplaySurface(displaySurface)
         val s = pipeline.inputSurface ?: return
         currentH265 = h265
         val mime = if (h265) MediaFormat.MIMETYPE_VIDEO_HEVC else MediaFormat.MIMETYPE_VIDEO_AVC
@@ -182,12 +201,36 @@ class VideoRenderer {
             decoder.configure(format, s, null, 0)
             decoder.start()
             codec = decoder
+            startOutputPump(decoder)
         } catch (e: Exception) {
             decoder.release()
             throw e
         }
         codecName = if (h265) "H.265" else "H.264"
         Log.i(TAG, "Video codec started: $mime ${videoWidth}x${videoHeight}")
+    }
+
+    /** Decoding completes asynchronously, even when a still photo sends no more input. */
+    private fun startOutputPump(decoder: MediaCodec) {
+        Thread({
+            while (true) {
+                val alive = synchronized(lock) {
+                    if (codec !== decoder) false else {
+                        try {
+                            drainOutput()
+                            // Short polling only while frames are arriving; wake promptly on feedFrame.
+                            lock.wait(if (System.nanoTime() - lastInputNs < 1_000_000_000L) 8L else 200L)
+                            true
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Video output stopped; waiting for a fresh keyframe", e)
+                            stopCodec()
+                            false
+                        }
+                    }
+                }
+                if (!alive) break
+            }
+        }, "PuffVideoOutput").apply { isDaemon = true; start() }
     }
 
     private fun stopCodec() {
@@ -204,6 +247,7 @@ class VideoRenderer {
             } catch (_: Exception) {}
         }
         codec = null
+        lock.notifyAll()
     }
 
     private fun drainOutput() {
@@ -211,7 +255,9 @@ class VideoRenderer {
         val info = MediaCodec.BufferInfo()
         while (true) {
             val idx = c.dequeueOutputBuffer(info, 0)
+            if (idx == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED || idx == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) continue
             if (idx < 0) break
+            renderedFrames++
             _recordOutputFrameTime()
             if (scheduledOutputBufferRelease) {
                 // schedule frame at VSYNC matching its NTP presentation time
@@ -220,7 +266,13 @@ class VideoRenderer {
                     _ptsBaseUs = ptsUs
                     _wallBaseNs = System.nanoTime()
                 }
-                c.releaseOutputBuffer(idx, _wallBaseNs + (ptsUs - _ptsBaseUs) * 1000L)
+                val now = System.nanoTime()
+                val due = _wallBaseNs + (ptsUs - _ptsBaseUs) * 1000L
+                // Clock discontinuities must not pin output buffers far into the future.
+                if (due < now - 250_000_000L || due > now + 100_000_000L) {
+                    _ptsBaseUs = ptsUs; _wallBaseNs = now
+                    c.releaseOutputBuffer(idx, true)
+                } else c.releaseOutputBuffer(idx, due)
             } else {
                 c.releaseOutputBuffer(idx, true)
             }

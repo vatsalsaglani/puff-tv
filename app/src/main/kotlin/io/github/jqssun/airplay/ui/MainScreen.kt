@@ -67,6 +67,7 @@ fun MainScreen(
     var fullscreen by remember { mutableStateOf(false) }
     val pin by viewModel.pinCode.collectAsState()
     val connections by viewModel.connectionCount.collectAsState()
+    val videoActive by viewModel.videoActive.collectAsState()
     val audioOnly by viewModel.audioOnly.collectAsState()
     val autoFullscreen by viewModel.autoFullscreen.collectAsState()
     val autoAudioMode by viewModel.autoAudioMode.collectAsState()
@@ -91,8 +92,9 @@ fun MainScreen(
     }
 
     // auto fullscreen when client connects (non-audio), but never while a pin is pending
-    LaunchedEffect(connections, audioOnly, pin) {
-        if (connections > 0 && !audioOnly && autoFullscreen && !fullscreen && pin == null) {
+    LaunchedEffect(videoActive, audioOnly, pin) {
+        if (!videoActive) fullscreen = false
+        if (videoActive && !audioOnly && autoFullscreen && !fullscreen && pin == null) {
             fullscreen = true
         }
     }
@@ -115,7 +117,7 @@ fun MainScreen(
             modifier = Modifier.fillMaxSize().background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
-            video()
+            if (videoActive) video()
         }
         return
     }
@@ -301,6 +303,7 @@ private fun OverviewContent(
 ) {
     val state by viewModel.serverState.collectAsState()
     val connections by viewModel.connectionCount.collectAsState()
+    val videoActive by viewModel.videoActive.collectAsState()
     val serverName by viewModel.serverName.collectAsState()
     val videoResolution by viewModel.videoResolution.collectAsState()
     val idlePreview by viewModel.idlePreview.collectAsState()
@@ -326,10 +329,10 @@ private fun OverviewContent(
             if (showAudioMode && state == ServerState.RUNNING && connections > 0) {
                 NowPlayingContent(viewModel)
             } else {
-                if (state == ServerState.RUNNING && (connections > 0 || idlePreview)) {
+                if (state == ServerState.RUNNING && (videoActive || idlePreview)) {
                     video()
                 }
-                if (state != ServerState.RUNNING || connections == 0) {
+                if (state != ServerState.RUNNING || !videoActive) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             imageVector = if (connections > 0) Icons.Default.CastConnected else Icons.Default.Cast,
@@ -357,7 +360,7 @@ private fun OverviewContent(
                         )
                     }
                 }
-                if (state == ServerState.RUNNING && connections > 0) {
+                if (state == ServerState.RUNNING && videoActive) {
                     Row(modifier = Modifier.align(Alignment.TopEnd).padding(4.dp)) {
                         IconButton(onClick = onPip, modifier = Modifier.dpadFocusPill()) {
                             Icon(

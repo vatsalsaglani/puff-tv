@@ -55,6 +55,9 @@ class MainViewModel @Inject constructor(app: Application) : AndroidViewModel(app
     private val _serverState = MutableStateFlow(ServerState.STOPPED)
     val serverState: StateFlow<ServerState> = _serverState.asStateFlow()
 
+    private val _videoActive = MutableStateFlow(false)
+    val videoActive = _videoActive.asStateFlow()
+
     private val _connectionCount = MutableStateFlow(0)
     val connectionCount: StateFlow<Int> = _connectionCount.asStateFlow()
 
@@ -344,6 +347,7 @@ class MainViewModel @Inject constructor(app: Application) : AndroidViewModel(app
         service?.let {
             _serverState.value = it.serverState.value
             _connectionCount.value = it.connectionCount.value
+            _videoActive.value = it.videoActive.value
             _videoAspect.value = it.videoAspect.value
             _videoResolution.value = it.videoResolution.value
             _audioOnly.value = it.audioOnly.value

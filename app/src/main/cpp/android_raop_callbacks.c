@@ -35,6 +35,7 @@ void android_callbacks_init(android_callback_ctx_t *ctx, JNIEnv *env, jobject ca
     memset(ctx->registered_keys, 0, sizeof(ctx->registered_keys));
 
     jclass cls = (*env)->GetObjectClass(env, callback_obj);
+    ctx->on_video_stopped = (*env)->GetMethodID(env, cls, "onVideoStopped", "()V");
     ctx->on_video_data = (*env)->GetMethodID(env, cls, "onVideoData", "([BJZ)V");
     ctx->on_audio_data = (*env)->GetMethodID(env, cls, "onAudioData", "([BIJI)V");
     ctx->on_audio_format = (*env)->GetMethodID(env, cls, "onAudioFormat", "(IIZ)V");
@@ -150,7 +151,12 @@ static void _noop_teardown(void *cls, bool *a, bool *b) { (void)cls; (void)a; (v
 static void _video_pause(void *cls) { LOGI("video_pause"); }
 static void _video_resume(void *cls) { LOGI("video_resume"); }
 static void _conn_feedback(void *cls) { (void)cls; }
-static void _video_reset(void *cls, reset_type_t t) { LOGI("video_reset %d", t); }
+static void _video_reset(void *cls, reset_type_t t) {
+    LOGI("video_reset %d", t);
+    android_callback_ctx_t *ctx = (android_callback_ctx_t *)cls;
+    JNIEnv *env = _get_env(ctx);
+    if (env) (*env)->CallVoidMethod(env, ctx->callback_obj, ctx->on_video_stopped);
+}
 static void _audio_flush(void *cls) { LOGI("audio_flush"); }
 static void _video_flush(void *cls) { LOGI("video_flush"); }
 static double _audio_set_client_volume(void *cls) { return 0.0; }

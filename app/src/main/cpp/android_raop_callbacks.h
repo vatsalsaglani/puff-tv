@@ -12,6 +12,7 @@ typedef struct {
     JavaVM *jvm;
     jobject callback_obj;
     jmethodID on_video_data;
+    jmethodID on_video_stopped;
     jmethodID on_audio_data;
     jmethodID on_audio_format;
     jmethodID on_video_size;

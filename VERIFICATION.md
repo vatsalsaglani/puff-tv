@@ -23,9 +23,21 @@ Local verification on 2026-10-10, OnePlus Y Series / Android 11 / ARM32, ~925 Mi
 
 ## Remaining device coverage
 
-- Native AirPlay phone pairing and live iPhone mirroring need a sender-device check. Discovery alone does not verify an end-to-end AirPlay session.
+- Native AirPlay pairing and audio were confirmed with an iPhone, but beta.1 video froze and sometimes showed corruption. This remains an open playback issue; discovery and audio do not establish working video.
 - Android phone MediaProjection consent, discovery and sender behavior need a physical Android phone check. Receiver protocol tests cannot prove every manufacturer's sender behavior.
 - Newer Android versions, non-Google launchers, direct AirPlay from app share menus, DRM content, and arbitrary DLNA controller interoperability are not certified.
 - A physical remote shortcut depends on the button/firmware. Injected ADB key events do not test the accessibility key path on this TV.
 
 The original cleanup/overlay build was also checked through a real restart, Home → streaming-app visibility changes, and active audio playback. This beta keeps cleanup and casting startup preferences independent; casting defaults to off at boot. Do not interpret these checks as a universal performance or compatibility guarantee.
+
+## Playback investigation — beta.2
+
+- Built and installed an in-place candidate with an independent decoder-output pump, bounded input backpressure handling, display reattachment after release, and decoder reset on resolution changes. Release build and JVM tests pass.
+- A sparse H.264 test on the OnePlus displays the first red frame, but the following blue frame stays buffered until another frame arrives. The candidate therefore does **not** yet pass the sparse-frame regression test.
+- The user retried native iPhone mirroring on beta.2 and reported that it works. The sparse synthetic single-frame buffering limitation remains recorded above.
+
+## AirPlay stop behavior — beta.3
+
+- Native video teardown and the final client disconnect now release the AirPlay renderer and mark video inactive.
+- The UI follows active video rather than open control sockets: stopping mirroring exits fullscreen and removes the old video surface, returning to the waiting screen.
+- Release build and seven JVM tests pass. Signed beta.3 installed in place. A synthetic RTSP video TEARDOWN on the TV returned 200 OK and invoked the new clear-playback callback; the server remained running. A real iPhone stop/reconnect visual check remains pending.

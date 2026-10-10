@@ -155,6 +155,7 @@ class VideoPipeline {
             // no display: keep consuming so decoder doesn't stall
             EGL14.eglMakeCurrent(eglDisplay, pbuffer, pbuffer, eglContext)
             st.updateTexImage()
+            st.getTransformMatrix(texMatrix)
             hasFrame = true
             return
         }
@@ -286,6 +287,10 @@ class VideoPipeline {
             EGL14.eglDestroyContext(eglDisplay, eglContext)
             EGL14.eglTerminate(eglDisplay)
         }
+        boundDisplay = null
+        hasFrame = false
+        frameAvailable = false
+        displayDirty = true
         eglDisplay = EGL14.EGL_NO_DISPLAY
         window = EGL14.EGL_NO_SURFACE
         pbuffer = EGL14.EGL_NO_SURFACE
